@@ -1,0 +1,10 @@
+{
+  "id": "Splittikin.StickyHUD",
+  "name": "Sticky HUD",
+  "version": "1.0.0",
+  "authors": "Splittikin",
+  "description": "Makes the HUD always display onscreen!",
+  "requirements": [],
+  "requirements_names": [],
+  "checksum_override_version": false
+}
