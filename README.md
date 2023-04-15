@@ -1,7 +1,7 @@
 # StickyHUD
 Rain World mod that makes the HUD always appear, even when the map button isn't being pressed!
 
-This is based off of NoirCatto's [RemixModTemplateWithOptions](https://github.com/NoirCatto/RainWorldRemix/tree/master/Templates/TemplateModWithOptions).
+This is based off of NoirCatto's [TemplateModWithOptions](https://github.com/NoirCatto/RainWorldRemix/tree/master/Templates/TemplateModWithOptions).
 
 For Steam users, you can use this mod by subscribing right [here](https://steamcommunity.com/sharedfiles/filedetails/?id=2962468888).
 
