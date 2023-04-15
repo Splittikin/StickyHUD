@@ -3,7 +3,7 @@
   "name": "Sticky HUD",
   "version": "1.0.0",
   "authors": "Splittikin",
-  "description": "Makes the HUD always display onscreen!",
+  "description": "Makes the HUD always display onscreen, even when the map button isn't being pressed!",
   "requirements": [],
   "requirements_names": [],
   "checksum_override_version": false

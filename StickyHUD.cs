@@ -16,9 +16,24 @@ using Debug = UnityEngine.Debug;
 
 namespace StickyHUD;
 
-[BepInPlugin("AuthorName.ModName", "Mod Name", "1.0.0")]
-public partial class TemplateMod : BaseUnityPlugin
+[BepInPlugin("Splittikin.StickyHUD", "Sticky HUD", "1.0.0")]
+public partial class StickyHUD : BaseUnityPlugin
 {
+    private StickyHUDOptions Options;
+
+    public StickyHUD()
+    {
+        try
+        {
+            Options = new StickyHUDOptions(this, Logger);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex);
+            throw;
+        }
+    }
+    
     private void OnEnable()
     {
         On.RainWorld.OnModsInit += RainWorldOnOnModsInit;
@@ -37,10 +52,10 @@ public partial class TemplateMod : BaseUnityPlugin
             On.HUD.RainMeter.Update += HUDRainmeterUpdateHook;
             On.HUD.KarmaMeter.Draw += HUDKarmaMeterDrawHook;
             
-
             On.RainWorldGame.ShutDownProcess += RainWorldGameOnShutDownProcess;
             On.GameSession.ctor += GameSessionOnctor;
-            
+
+            MachineConnector.SetRegisteredOI("Splittikin.StickyHUD", Options);
             IsInit = true;
         }
         catch (Exception ex)
@@ -68,8 +83,9 @@ public partial class TemplateMod : BaseUnityPlugin
     void HUDKarmaMeterDrawHook(On.HUD.KarmaMeter.orig_Draw orig, HUD.KarmaMeter self, float timeStacker)
     {
         orig(self, timeStacker);
-        if (Mathf.Max(halfTimeBlink % 15) > 7)
+        if (Options.BlinkKarma.Value && Mathf.Max(halfTimeBlink % 15) > 7)
         {
+            // When the rain timer blinks once half of it has passed, blink the karma symbol as well so the user sees
             self.karmaSprite.alpha = 0;
         }
     }
