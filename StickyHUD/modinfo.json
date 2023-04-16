@@ -1,7 +1,7 @@
 {
   "id": "Splittikin.StickyHUD",
   "name": "Sticky HUD",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "authors": "Splittikin",
   "description": "Makes the HUD always display onscreen, even when the map button isn't being pressed!",
   "requirements": [],

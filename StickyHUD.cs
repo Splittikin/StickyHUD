@@ -16,10 +16,12 @@ using Debug = UnityEngine.Debug;
 
 namespace StickyHUD;
 
-[BepInPlugin("Splittikin.StickyHUD", "Sticky HUD", "1.0.0")]
+[BepInPlugin("Splittikin.StickyHUD", "Sticky HUD", "1.1.0")]
 public partial class StickyHUD : BaseUnityPlugin
 {
     private StickyHUDOptions Options;
+
+    public bool isEnabled = true;
 
     public StickyHUD()
     {
@@ -51,6 +53,8 @@ public partial class StickyHUD : BaseUnityPlugin
             On.HUD.HUD.Update += HUDUpdateHook;
             On.HUD.RainMeter.Update += HUDRainmeterUpdateHook;
             On.HUD.KarmaMeter.Draw += HUDKarmaMeterDrawHook;
+            On.RainWorld.Update += RainWorldUpdateHook;
+            On.RainWorldGame.ctor += RainWorldGamectorHook;
             
             On.RainWorldGame.ShutDownProcess += RainWorldGameOnShutDownProcess;
             On.GameSession.ctor += GameSessionOnctor;
@@ -64,13 +68,30 @@ public partial class StickyHUD : BaseUnityPlugin
             throw;
         }
     }
-    
-    
+
+
+    void RainWorldUpdateHook(On.RainWorld.orig_Update orig, RainWorld self)
+    {
+        orig(self);
+        if (Input.GetKeyDown(Options.ToggleButton.Value))
+        {
+            isEnabled = !isEnabled;
+        }
+    }
+
+    void RainWorldGamectorHook(On.RainWorldGame.orig_ctor orig, RainWorldGame self, ProcessManager pm)
+    {
+        orig(self, pm);
+        isEnabled = Options.DefaultEnabled.Value;
+    }
     
     void HUDUpdateHook(On.HUD.HUD.orig_Update orig, HUD.HUD self)
     {
         orig(self);
-        self.showKarmaFoodRain = true;
+        if (isEnabled)
+        {
+            self.showKarmaFoodRain = true;
+        }
     }
 
     public int halfTimeBlink;
@@ -83,10 +104,14 @@ public partial class StickyHUD : BaseUnityPlugin
     void HUDKarmaMeterDrawHook(On.HUD.KarmaMeter.orig_Draw orig, HUD.KarmaMeter self, float timeStacker)
     {
         orig(self, timeStacker);
-        if (Options.BlinkKarma.Value && Mathf.Max(halfTimeBlink % 15) > 7)
+        if (Options.BlinkKarma.Value && isEnabled && Mathf.Max(halfTimeBlink % 15) > 7)
         {
             // When the rain timer blinks once half of it has passed, blink the karma symbol as well so the user sees
             self.karmaSprite.alpha = 0;
+            if (self.ringSprite != null)
+            {
+                self.ringSprite.alpha = 0;
+            }
         }
     }
     
